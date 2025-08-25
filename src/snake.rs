@@ -12,7 +12,10 @@ pub struct Block {
 
 impl From<(i32, i32)> for Block {
     fn from(tuple: (i32, i32)) -> Self {
-        Self { x: tuple.0, y: tuple.1 }
+        Self {
+            x: tuple.0,
+            y: tuple.1,
+        }
     }
 }
 
@@ -59,7 +62,7 @@ impl Snake {
         let mut last_block = Block { x, y };
 
         for _ in 0..length {
-            body.push_back(last_block.clone());
+            body.push_front(last_block.clone());
             last_block = direction.forward(last_block);
         }
 
@@ -104,7 +107,9 @@ impl Snake {
     }
 
     pub fn next_head(&self, direction: Option<Direction>) -> Block {
-        direction.unwrap_or(self.direction).forward(self.head().clone())
+        direction
+            .unwrap_or(self.direction)
+            .forward(self.head().clone())
     }
 
     pub fn restore_tail(&mut self) {
@@ -113,20 +118,19 @@ impl Snake {
     }
 
     pub fn tail_overlaps(&self, x: i32, y: i32) -> bool {
-        let mut idx = 1;
+        //        let mut idx = 1;
 
         for block in &self.body {
             if x == block.x && y == block.y {
                 return true;
             }
 
-            if idx == self.body.len() - 1 {
-                break;
-            }
-            idx += 1;
+            //            if idx == self.body.len() - 1 {
+            //                break;
+            //            }
+            //            idx += 1;
         }
 
         false
     }
 }
-
